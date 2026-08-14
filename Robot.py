@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from os import name
 
 
 class InsufficientBatteryError(Exception):
@@ -60,3 +61,13 @@ class CleaningRobot(Robot):
     def perform_task(self):
         self.use_battery(10)
         return f"{self.name} cleaned the room."
+    
+    
+class DroneRobot(Robot):
+    def __init__(self, name, battery=100, max_altitude=120):
+        super().__init__(name, battery)
+        self.max_altitude = max_altitude
+
+    def perform_task(self):
+        self.use_battery(20)
+        return f"{self.name} flew to {self.max_altitude}m."
