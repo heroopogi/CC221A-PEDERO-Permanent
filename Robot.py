@@ -105,4 +105,60 @@ def run_task_safely(robot, **kwargs):
 def fleet_report(robots):
     for robot in robots:
         print(robot)
-        
+
+
+def mutable_demo():
+    class Buggy:
+        items = []
+
+    a = Buggy()
+    b = Buggy()
+
+    a.items.append("Apple")
+
+    print("Buggy:")
+    print(a.items)
+    print(b.items)
+
+    class Fixed:
+        def __init__(self):
+            self.items = []
+
+    c = Fixed()
+    d = Fixed()
+
+    c.items.append("Apple")
+
+    print("Fixed:")
+    print(c.items)
+    print(d.items)        
+
+
+def main():
+    roomba = CleaningRobot("Roomba", 100)
+    drone = DroneRobot.from_config({
+        "name": "Aqua-Drone",
+        "battery": 15
+    })
+
+    print("=== Fleet Report ===")
+    fleet_report([roomba, drone])
+
+    print("\n=== Robot Info ===")
+    print(repr(roomba))
+    print(f"Manufacturer: {Robot.manufacturer}")
+    print(f"Population: {Robot.population}")
+
+    print("\n=== Tasks ===")
+    run_task_safely(roomba)
+    run_task_safely(drone)
+
+    print("\n=== Decorator ===")
+    print(CleaningRobot.perform_task.__name__)
+
+    print("\n=== Mutable Attribute Demo ===")
+    mutable_demo()
+
+
+if __name__ == "__main__":
+    main()
