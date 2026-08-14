@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from functools import wraps
 import logging
 
 
@@ -58,13 +59,23 @@ class Robot(ABC):
     @abstractmethod
     def perform_task(self):
         pass
-    
+
+def log_action(func):
+    @wraps(func)
+    def wrapper(self, *args, **kwargs):
+        logging.info(f"{self.name}: starting task")
+        result = func(self, *args, **kwargs)
+        logging.info(f"{self.name}: finished task")
+        return result
+
+    return wrapper
     
 class CleaningRobot(Robot):
     def __init__(self, name, battery=100, dust_capacity=500):
         super().__init__(name, battery)
         self.dust_capacity = dust_capacity
 
+    @log_action
     def perform_task(self):
         self.use_battery(10)
         return f"{self.name} cleaned the room."
@@ -94,5 +105,4 @@ def run_task_safely(robot, **kwargs):
 def fleet_report(robots):
     for robot in robots:
         print(robot)
-        
         
